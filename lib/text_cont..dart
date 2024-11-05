@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task1/main.dart';
 
-final TextEditingController _controller = TextEditingController();
+ TextEditingController _controller = TextEditingController();
  TextEditingController inputKey=_controller;
 
 
@@ -35,7 +35,14 @@ class _CustomContainerState extends State<CustomContainer> {
     super.initState();
     Load();
   }
-
+  void Load() {
+    SharedPreference prefs = SharedPreference();
+    prefs.loadSavedInput();
+  }
+  void SavedData() {
+    SharedPreference Data = SharedPreference();
+    Data.saveInput();
+  }
 
 
 /*
@@ -60,7 +67,7 @@ class _CustomContainerState extends State<CustomContainer> {
         border: Border.all(color: widget.borderColor),
       ),
       child: TextField(
-        controller: _controller,
+        controller: inputKey,
         decoration: InputDecoration(
           hintText: widget.textFieldLabel,
           border: InputBorder.none,
