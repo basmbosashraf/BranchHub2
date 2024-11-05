@@ -20,21 +20,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    load();
+    Load();
+  }
+  void Load() {
+    SharedPreference prefs = SharedPreference();
+    prefs.loadSavedInput();
+  }
+  void SavedData() {
+    SharedPreference Data = SharedPreference();
+    Data.saveInput();
   }
 
-  void load() async {
-    await mySharedPreference.loadSavedInput((data) {
-      setState(() {
-        fetchedDataString = data; // تحديث البيانات المسترجعة
-      });
-    });
-  }
 
-  void saveInput(String data) async {
-    await mySharedPreference.saveInput(data, context);
-    load();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                   icon: Icon(Icons.save, color: Colors.white),
                   onPressed: () {
-                    saveInput(fetchedDataString); // احفظ البيانات الحالية
+                    SavedData();
                   },
                 ),
               ],
