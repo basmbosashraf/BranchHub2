@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final TextEditingController _controller = TextEditingController();
+late String inputKey;
+
 class CustomContainer extends StatefulWidget {
   const CustomContainer({
     super.key,
@@ -10,7 +13,6 @@ class CustomContainer extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
     this.margin = const EdgeInsets.all(10),
     this.borderColor = Colors.grey,
-    required this.inputKey,
   });
 
   final String textFieldLabel;
@@ -19,15 +21,12 @@ class CustomContainer extends StatefulWidget {
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Color borderColor;
-  final String inputKey;
 
   @override
   State<CustomContainer> createState() => _CustomContainerState();
 }
 
 class _CustomContainerState extends State<CustomContainer> {
-  final TextEditingController _controller = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,7 @@ class _CustomContainerState extends State<CustomContainer> {
 
   Future<void> _loadSavedInput() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? savedInput = sharedPreferences.getString(widget.inputKey);
+    String? savedInput = sharedPreferences.getString(inputKey);
     if (savedInput != null) {
       _controller.text = savedInput;
     }
@@ -44,7 +43,7 @@ class _CustomContainerState extends State<CustomContainer> {
 
   Future<void> saveInput() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString(widget.inputKey, _controller.text);
+    await sharedPreferences.setString(inputKey, _controller.text);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('تم حفظ النص بنجاح!')),
     );

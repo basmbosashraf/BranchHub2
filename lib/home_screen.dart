@@ -1,48 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:task1/text_cont..dart'; // E
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task1/text_cont..dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key,
-  required this.inputKey});
+  const HomeScreen({super.key});
 
   final int branch_counter = 0;
 
-  final String inputKey;
-
   @override
-
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
-
 
 class _HomeScreenState extends State<HomeScreen> {
   String? FetchedDataString;
 
-
-
-
-
-  void initState(){
-    super.initState();
-    _loadSavedInput;  }
-
-
-
   @override
-
+  void initState() {
+    super.initState();
+    _loadSavedInput();
+  }
 
   Future<void> _loadSavedInput() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? savedData = sharedPreferences.getString(widget.inputKey);
-   setState(() {
-     FetchedDataString=savedData;
-   });
+    String? savedData = sharedPreferences.getString(inputKey);
+    setState(() {
+      FetchedDataString = savedData;
+    });
   }
 
-
-
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -66,11 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {},
                 ),
                 IconButton(
-                    icon: Icon(Icons.save, color: Colors.white),
-                    onPressed: () async {
-                      await _loadSavedInput();
-                    }
-
+                  icon: Icon(Icons.save, color: Colors.white),
+                  onPressed: () async {
+                    await _loadSavedInput();
+                  },
                 ),
               ],
             ),
@@ -87,12 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Branch',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
+                      Text('Branch', style: TextStyle(fontSize: 15)),
                       SizedBox(height: 8),
                       Container(
                         height: 40,
@@ -104,8 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: Alignment.center,
                         child: Text(
                           '${widget.branch_counter}',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -120,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         textFieldLabel: '0',
                         containerWidth: 100,
                         containerHeight: 40,
-                        inputKey: widget.inputKey,
                       ),
                     ],
                   ),
@@ -148,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
         CustomContainer(
           textFieldLabel: hint,
           containerWidth: width,
-          inputKey: widget.inputKey,
         ),
       ],
     );
