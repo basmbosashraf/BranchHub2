@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task1/main.dart';
+import 'package:task1/coponents/prefs_class.dart';
 
- TextEditingController _controller = TextEditingController();
- TextEditingController inputKey=_controller;
+
+TextEditingController _controller = TextEditingController();
+TextEditingController inputKey=_controller;
 
 
 class CustomContainer extends StatefulWidget {
@@ -33,27 +33,8 @@ class _CustomContainerState extends State<CustomContainer> {
   @override
   void initState() {
     super.initState();
-    Load();
+    SharedPreferenceHelper().loadSavedInput();
   }
-  void Load() {
-    SharedPreference prefs = SharedPreference();
-    prefs.loadSavedInput();
-  }
-  void SavedData() {
-    SharedPreference Data = SharedPreference();
-    Data.saveInput();
-  }
-
-
-/*
-  Future<void> saveInput() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString(inputKey, _controller.text);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('تم حفظ النص بنجاح!')),
-    );
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +49,7 @@ class _CustomContainerState extends State<CustomContainer> {
       ),
       child: TextField(
         controller: inputKey,
+
         decoration: InputDecoration(
           hintText: widget.textFieldLabel,
           border: InputBorder.none,
@@ -77,8 +59,8 @@ class _CustomContainerState extends State<CustomContainer> {
             fontWeight: FontWeight.w400,
           ),
         ),
-        onSubmitted: (value) {
-          SavedData();
+        onSubmitted: (savedData) {
+          SharedPreferenceHelper().saveInput(inputKey as String, context);
         },
       ),
     );

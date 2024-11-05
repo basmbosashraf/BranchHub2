@@ -1,34 +1,27 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task1/main.dart';
-import 'package:task1/text_cont..dart';
+import 'package:task1/coponents/prefs_class.dart';
+import 'package:task1/coponents/text_cont..dart';
+late  int branchCounter ;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  final int branchCounter = 0;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+
 class _HomeScreenState extends State<HomeScreen> {
   late String fetchedDataString = '';
 
-  SharedPreference mySharedPreference = SharedPreference();
 
   @override
   void initState() {
     super.initState();
-    Load();
-  }
-  void Load() {
-    SharedPreference prefs = SharedPreference();
-    prefs.loadSavedInput();
-  }
-  void SavedData() {
-    SharedPreference Data = SharedPreference();
-    Data.saveInput();
+    SharedPreferenceHelper().loadSavedInput();
   }
 
 
@@ -40,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF005EAA),
-          toolbarHeight: 60,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.10,
           title: Text(
             'Branch / Store / Cashier',
             style: TextStyle(
@@ -55,71 +48,83 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 IconButton(
                   icon: Icon(Icons.add_circle, color: Colors.white),
-                  onPressed: () {},
+                  onPressed: () {
+                    branchCounter++;
+                  },
                 ),
                 IconButton(
                   icon: Icon(Icons.save, color: Colors.white),
                   onPressed: () {
-                    SavedData();
+                    SharedPreferenceHelper().saveInput(branchCounter as String, context);
                   },
                 ),
               ],
             ),
           ],
+
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Branch',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        height: 40,
-                        width: 220,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade400),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Branch',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            SizedBox(height: 8),
+                            Container(
+                              height: 40,
+                              width: 220,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade400),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                'branchCounter',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${widget.branchCounter}',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text('Custom No.'),
+                            SizedBox(height: 2),
+                            CustomContainer(
+                              textFieldLabel: '0',
+                              containerWidth: 100,
+                              containerHeight: 40,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('Custom No.'),
-                      SizedBox(height: 2),
-                      CustomContainer(
-                        textFieldLabel: '0',
-                        containerWidth: 100,
-                        containerHeight: 40,
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    SizedBox(height: 5),
+                    _buildTextFieldSection('Arabic Name', 'مباني المؤسسة', 370),
+                    _buildTextFieldSection('Arabic Description', 'W', 370),
+                    _buildTextFieldSection('English Name', 'Company Branches', 370),
+                    _buildTextFieldSection('English Description', '', 370),
+                    _buildTextFieldSection('Note', 'any notes', 370),
+                    _buildTextFieldSection('Address', 'KSA', 370),
+                  ],
+                ),
               ),
-              SizedBox(height: 5),
-              _buildTextFieldSection('Arabic Name', 'مباني المؤسسة', 370),
-              _buildTextFieldSection('Arabic Description', 'W', 370),
-              _buildTextFieldSection('English Name', 'Company Branches', 370),
-              _buildTextFieldSection('English Description', '', 370),
-              _buildTextFieldSection('Note', 'any notes', 370),
-              _buildTextFieldSection('Address', 'KSA', 370),
             ],
           ),
         ),
@@ -135,8 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
         CustomContainer(
           textFieldLabel: hint,
           containerWidth: width,
+
         ),
       ],
     );
   }
 }
+
