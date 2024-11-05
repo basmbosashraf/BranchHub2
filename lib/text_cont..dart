@@ -4,6 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 final TextEditingController _controller = TextEditingController();
 late String inputKey;
 
+Future<void> _loadSavedInput() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String? savedInput = sharedPreferences.getString(inputKey);
+  if (savedInput != null) {
+    _controller.text = savedInput;
+  }
+}
+
 class CustomContainer extends StatefulWidget {
   const CustomContainer({
     super.key,
@@ -27,6 +35,8 @@ class CustomContainer extends StatefulWidget {
 }
 
 class _CustomContainerState extends State<CustomContainer> {
+  final TextEditingController _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();

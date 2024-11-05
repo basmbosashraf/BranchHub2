@@ -15,7 +15,7 @@ class _AppRootState extends State<AppRoot> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:HomeScreen(),
+      home:HomeScreen(inputKey: '',),
     );
   }
 }
