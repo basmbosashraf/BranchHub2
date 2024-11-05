@@ -1,48 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task1/text_cont..dart'; // E
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task1/main.dart';
+import 'package:task1/text_cont..dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key,
-    required this.inputKey});
+  const HomeScreen({super.key});
 
-  final int branch_counter = 0;
-
-  final String inputKey;
+  final int branchCounter = 0;
 
   @override
-
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
-
 class _HomeScreenState extends State<HomeScreen> {
-  String? FetchedDataString;
+  late String fetchedDataString = '';
 
-
-
-
-
-  void initState(){
-    super.initState();
-    _loadSavedInput;  }
-
-
+  SharedPreference mySharedPreference = SharedPreference();
 
   @override
+  void initState() {
+    super.initState();
+    load();
+  }
 
-
-  Future<void> _loadSavedInput() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? savedData = sharedPreferences.getString(widget.inputKey);
-    setState(() {
-      FetchedDataString=savedData;
+  void load() async {
+    await mySharedPreference.loadSavedInput((data) {
+      setState(() {
+        fetchedDataString = data; // تحديث البيانات المسترجعة
+      });
     });
   }
 
+  void saveInput(String data) async {
+    await mySharedPreference.saveInput(data, context);
+    load();
+  }
 
-
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -66,11 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {},
                 ),
                 IconButton(
-                    icon: Icon(Icons.save, color: Colors.white),
-                    onPressed: () async {
-                      await _loadSavedInput();
-                    }
-
+                  icon: Icon(Icons.save, color: Colors.white),
+                  onPressed: () {
+                    saveInput(fetchedDataString); // احفظ البيانات الحالية
+                  },
                 ),
               ],
             ),
@@ -89,9 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         'Branch',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
+                        style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(height: 8),
                       Container(
@@ -103,9 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          '${widget.branch_counter}',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                          '${widget.branchCounter}',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

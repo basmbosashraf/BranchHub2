@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task1/main.dart';
 
 final TextEditingController _controller = TextEditingController();
 late String inputKey;
 
-Future<void> _loadSavedInput() async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  String? savedInput = sharedPreferences.getString(inputKey);
-  if (savedInput != null) {
-    _controller.text = savedInput;
-  }
-}
 
 class CustomContainer extends StatefulWidget {
   const CustomContainer({
@@ -35,22 +29,16 @@ class CustomContainer extends StatefulWidget {
 }
 
 class _CustomContainerState extends State<CustomContainer> {
-  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loadSavedInput();
+    Load();
   }
 
-  Future<void> _loadSavedInput() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? savedInput = sharedPreferences.getString(inputKey);
-    if (savedInput != null) {
-      _controller.text = savedInput;
-    }
-  }
 
+
+/*
   Future<void> saveInput() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(inputKey, _controller.text);
@@ -58,6 +46,7 @@ class _CustomContainerState extends State<CustomContainer> {
       SnackBar(content: Text('تم حفظ النص بنجاح!')),
     );
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +71,7 @@ class _CustomContainerState extends State<CustomContainer> {
           ),
         ),
         onSubmitted: (value) {
-          saveInput();
+          SavedData();
         },
       ),
     );
